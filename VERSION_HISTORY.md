@@ -1,5 +1,23 @@
 # Version History
 
+## Version 1.0.1
+
+- **Cambio de prompt**: Reemplazado Ble.sh con Starship para mejorar la personalización del prompt y reducir la complejidad de configuración.
+  - Eliminado el archivo `prompt` en `defaults/bash` relacionado con Ble.sh.
+  - Añadido Starship como el nuevo prompt por defecto en `.bashrc`, junto con la configuración inicial en `app-starship.sh`.
+- **Actualización de archivos de configuración de Bash**:
+  - Modificado `.bashrc` para incluir la inicialización de Starship y eliminación de Ble.sh.
+  - Simplificado el archivo `rc` en `defaults/bash` para remover la referencia a Ble.sh.
+- **Nuevas aplicaciones opcionales**:
+  - Añadido `app-discord.sh` para instalar Discord mediante Flatpak.
+  - Añadido `app-redshift.sh` para instalar Redshift y Redshift-GTK a través de `apt`.
+  - Añadido `app-safeeyes.sh` para la instalación de SafeEyes, una herramienta de protección ocular.
+  - Actualizado `first-run-choices.sh` para incluir Discord y Redshift en la lista de aplicaciones opcionales, con selección predeterminada.
+- **Mejoras de configuración de Starship**:
+  - Aplicado el preset `nerd-font-symbols` a Starship para asegurar compatibilidad con Meslo Nerd Font y mantener consistencia visual en el prompt.
+
+Este lanzamiento (v1.0.1) refleja cambios importantes en la configuración del prompt y nuevas opciones de aplicaciones opcionales para mejorar la personalización y funcionalidad del entorno de desarrollo.
+
 ## Version 1.0.0 (2024-11-10)
 
 - **Refactorización y personalización**: Transformación y simplificación del proyecto Omakub para adaptarse mejor a sistemas basados en Ubuntu sin GNOME, optimizando el flujo de instalación y configuraciones predeterminadas.

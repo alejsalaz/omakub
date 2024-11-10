@@ -8,5 +8,8 @@ source ~/.local/share/omakub/defaults/bash/rc
 export EDITOR="code --wait"
 export SUDO_EDITOR="$EDITOR"
 
+# Starship
+eval "$(starship init bash)"
+
 # Ble.sh
 [[ ! ${BLE_VERSION-} ]] || ble-attach
