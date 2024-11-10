@@ -1,19 +1,21 @@
-# Omakub
+# My Personal Fork of Omakub
 
-Turn a fresh Ubuntu installation into a fully-configured, beautiful, and modern web development system by running a single command. That's the one-line pitch for Omakub. No need to write bespoke configs for every essential tool just to get started or to be up on all the latest command-line tools. Omakub is an opinionated take on what Linux can be at its best.
+This project is a personalized fork of Omakub, designed to turn a fresh Ubuntu-based installation (e.g., Linux Mint) into a fully-configured, modern development environment tailored to my specific needs. The goal is to provide a cohesive setup that incorporates my preferred tools and configurations, ready to use with a single command.
 
-Watch the introduction video and read more at [omakub.org](https://omakub.org).
+## Features
 
-## Contributing to the documentation
+- **Customized Development Environment**: Includes preferred tools for terminal work, optimized for a Linux Mint setup.
+- **Essential Tools Only**: Focus on terminal applications and lightweight setup without heavy desktop dependencies.
+- **Pre-configured with Preferred Fonts, Theme, and Applications**:
+  - Font: Meslo Nerd Font
+  - Theme: Dracula
+  - Key applications: `obs-studio`, `spotify`, and `steam`
 
-Please help us improve Omakub's documentation on the [basecamp/omakub-site repository](https://github.com/basecamp/omakub-site).
+## Installation
 
-## License
+To set up this customized environment, clone the repository and run the installation script:
 
-Omakub is released under the [MIT License](https://opensource.org/licenses/MIT).
-
-## Extras
-
-While omakub is purposed to be an opinionated take, the open source community offers alternative customization, add-ons, extras, that you can use to adjust, replace or enrich your experience.
-
-[⇒ Browse the omakub extensions.](EXTENSIONS.md)
+```bash
+git clone https://github.com/alejsalaz/omakub.git ~/.local/share/omakub
+cd ~/.local/share/omakub
+source install.sh

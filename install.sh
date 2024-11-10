@@ -1,34 +1,42 @@
+#!/bin/bash
 # Exit immediately if a command exits with a non-zero status
 set -e
 
-# Desktop software and tweaks will only be installed if we're running Gnome
-RUNNING_GNOME=$([[ "$XDG_CURRENT_DESKTOP" == *"GNOME"* ]] && echo true || echo false)
-
-# Check the distribution name and version and abort if incompatible
+# Check the distribution name and version; abort if incompatible
 source ~/.local/share/omakub/install/check-version.sh
 
-if $RUNNING_GNOME; then
-  # Ensure computer doesn't go to sleep or lock while installing
-  gsettings set org.gnome.desktop.screensaver lock-enabled false
-  gsettings set org.gnome.desktop.session idle-delay 0
+echo "Starting installation process..."
 
-  echo "Get ready to make a few choices..."
-  source ~/.local/share/omakub/install/terminal/required/app-gum.sh >/dev/null
-  source ~/.local/share/omakub/install/first-run-choices.sh
+# Ensure the computer doesn't go to sleep or lock during the installation
+# Mask sleep, suspend, hibernate, and hybrid-sleep targets
+sudo systemctl mask sleep.target suspend.target hibernate.target hybrid-sleep.target
 
-  echo "Installing terminal and desktop tools..."
-else
-  echo "Only installing terminal tools..."
-fi
+# Run first-run choices
+source ~/.local/share/omakub/install/first-run-choices.sh
 
-# Install terminal tools
+# Run terminal setup and required installers
 source ~/.local/share/omakub/install/terminal.sh
 
-if $RUNNING_GNOME; then
-  # Install desktop tools and tweaks
-  source ~/.local/share/omakub/install/desktop.sh
+# Check if a desktop environment is running
+if [ -n "$XDG_CURRENT_DESKTOP" ]; then
+  echo "Desktop environment detected. Installing desktop tools..."
+  for installer in ~/.local/share/omakub/install/desktop/*.sh; do
+    source "$installer"
+  done
+else
+  echo "No desktop environment detected. Skipping desktop tools."
+fi
 
-  # Revert to normal idle and lock settings
-  gsettings set org.gnome.desktop.screensaver lock-enabled true
-  gsettings set org.gnome.desktop.session idle-delay 300
+# Unmask sleep settings to revert to normal
+sudo systemctl unmask sleep.target suspend.target hibernate.target hybrid-sleep.target
+# Clean up
+sudo apt autoremove -y
+
+echo "Installation complete."
+
+# Prompt to reboot for all settings to take effect
+if gum confirm "Ready to reboot for all settings to take effect?"; then
+  sudo reboot
+else
+  echo "Please reboot manually for changes to take full effect."
 fi

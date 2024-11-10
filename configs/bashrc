@@ -1,5 +1,12 @@
+# Load ble.sh
+[[ $- == *i* ]] && source ~/.local/share/blesh/ble.sh --noattach
+
+# Load Omakub defaults
 source ~/.local/share/omakub/defaults/bash/rc
 
 # Editor used by CLI
-export EDITOR="nvim"
+export EDITOR="code --wait"
 export SUDO_EDITOR="$EDITOR"
+
+# Ble.sh
+[[ ! ${BLE_VERSION-} ]] || ble-attach

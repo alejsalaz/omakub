@@ -1,38 +1,475 @@
 # File system
-alias ls='eza -lh --group-directories-first --icons'
-alias lsa='ls -a'
-alias lt='eza --tree --level=2 --long --icons --git'
-alias lta='lt -a'
-alias ff="fzf --preview 'batcat --style=numbers --color=always {}'"
-alias fd='fdfind'
-alias cd='z'
+ls() {
+  echo "Listing files..."
+  eza -lh --group-directories-first --icons || echo "Failed to list files."
+}
+lsa() {
+  echo "Listing all files, including hidden ones..."
+  ls -a || echo "Failed to list all files."
+}
+lt() {
+  echo "Listing files in a tree structure..."
+  eza --tree --level=2 --long --icons --git || echo "Failed to list files in a tree structure."
+}
+lta() {
+  echo "Listing all files in a tree structure..."
+  lt -a || echo "Failed to list all files in a tree structure."
+}
+ff() {
+  echo "Finding files with preview..."
+  fzf --preview 'batcat --style=numbers --color=always {}' || echo "Failed to find files with preview."
+}
+fd() {
+  echo "Searching for files..."
+  fdfind "$@" || echo "Failed to search for files."
+}
+cd() {
+  echo "Changing directory..."
+  z "$@" || echo "Failed to change directory."
+}
 
 # Directories
-alias ..='cd ..'
-alias ...='cd ../..'
-alias ....='cd ../../..'
+..() {
+  echo "Going up one directory..."
+  cd .. || echo "Failed to go up one directory."
+}
+...() {
+  echo "Going up two directories..."
+  cd ../.. || echo "Failed to go up two directories."
+}
+....() {
+  echo "Going up three directories..."
+  cd ../../.. || echo "Failed to go up three directories."
+}
 
 # Tools
-alias n='nvim'
-alias g='git'
-alias d='docker'
-alias r='rails'
-alias bat='batcat'
-alias lzg='lazygit'
-alias lzd='lazydocker'
+n() {
+  echo "Opening Neovim..."
+  nvim "$@" || echo "Failed to open Neovim."
+}
+g() {
+  echo "Executing Git command..."
+  git "$@" || echo "Failed to execute Git command."
+}
+d() {
+  echo "Running Docker command..."
+  docker "$@" || echo "Failed to run Docker command."
+}
+r() {
+  echo "Running Rails command..."
+  rails "$@" || echo "Failed to run Rails command."
+}
+bat() {
+  echo "Displaying file with bat..."
+  batcat "$@" || echo "Failed to display file with bat."
+}
+lzg() {
+  echo "Opening lazygit..."
+  lazygit || echo "Failed to open lazygit."
+}
+lzd() {
+  echo "Opening lazydocker..."
+  lazydocker || echo "Failed to open lazydocker."
+}
 
 # Git
-alias gcm='git commit -m'
-alias gcam='git commit -a -m'
-alias gcad='git commit -a --amend'
+gcam() {
+  echo "Committing all changes with message..."
+  git commit -a -m "$1" || echo "Failed to commit all changes."
+}
+gcad() {
+  echo "Amending last commit..."
+  git commit -a --amend || echo "Failed to amend last commit."
+}
+
+# Navegación y directorios
+..() {
+  echo "Going up one directory..."
+  z .. || echo "Failed to go up one directory."
+}
+home() {
+  echo "Moving to the home directory..."
+  z ~ || echo "Failed to move to the home directory."
+}
+zapi() {
+  echo "Moving to the API directory..."
+  z nominapp_api || echo "Failed to move to the API directory."
+}
+zcalc() {
+  echo "Moving to the Labor Calculator directory..."
+  z labor_calculator || echo "Failed to move to the Labor Calculator directory."
+}
+zdoc() {
+  echo "Moving to the documents directory..."
+  z Documents || echo "Failed to move to the documents directory."
+}
+zdow() {
+  echo "Moving to the downloads directory..."
+  z Downloads || echo "Failed to move to the downloads directory."
+}
+zreact() {
+  echo "Moving to the React directory..."
+  z nominapp_react || echo "Failed to move to the React directory."
+}
+
+# Comandos del sistema
+cls() {
+  echo "Clearing the screen..."
+  clear || echo "Failed to clear the screen."
+}
+fbc() {
+  echo "Opening file in Visual Studio Code..."
+  fzf --bind 'enter:become(code {})' || echo "Failed to open file in Visual Studio Code."
+}
+fq() {
+  echo "Finding a file..."
+  fzf -q "$@" || echo "Failed to find a file."
+}
+h() {
+  echo "Displaying command history..."
+  history || echo "Failed to display command history."
+}
+ioredis() {
+  echo "Restarting Redis server..."
+  sudo service redis-server stop && redis-server || echo "Failed to restart Redis server."
+}
+layout() {
+  echo "Opening Konsole with development layout..."
+  konsole --layout ~/Documents/Konsole || echo "Failed to open Konsole with layout."
+}
+reload() {
+  echo "Reloading bash configuration..."
+  source ~/.bashrc || echo "Failed to reload bash configuration."
+}
+remove() {
+  echo "Removing a program and its dependencies..."
+  sudo apt purge --auto-remove "$@" || echo "Failed to remove program."
+}
+repeat() {
+  echo "Repeating command..."
+  for run in {1..10}; do "$@"; done || echo "Failed to repeat command."
+}
+bashrc() {
+  echo "Opening ZSH configuration in Visual Studio Code..."
+  code ~/.bashrc || echo "Failed to open ZSH configuration."
+}
+
+# Comandos de red y conectividad
+disable6() {
+  echo "Disabling IPv6..."
+  sudo sysctl -w net.ipv6.conf.all.disable_ipv6=1 &&
+    sudo sysctl -w net.ipv6.conf.default.disable_ipv6=1 &&
+    sudo sysctl -w net.ipv6.conf.lo.disable_ipv6=1 ||
+    echo "Failed to disable IPv6."
+}
+
+enable6() {
+  echo "Enabling IPv6..."
+  sudo sysctl -w net.ipv6.conf.all.disable_ipv6=0 &&
+    sudo sysctl -w net.ipv6.conf.default.disable_ipv6=0 &&
+    sudo sysctl -w net.ipv6.conf.lo.disable_ipv6=0 ||
+    echo "Failed to enable IPv6."
+}
+
+google4() {
+  echo "Pinging Google with IPv4..."
+  ping 8.8.8.8 -c 5 || echo "Failed to ping Google with IPv4."
+}
+
+google6() {
+  echo "Pinging Google with IPv6..."
+  ping www.google.com.co -c 5 || echo "Failed to ping Google with IPv6."
+}
+
+# Comandos relacionados con Git
+ga() {
+  echo "Adding changes to the staging area..."
+  git add "$@" || echo "Failed to add changes to the staging area."
+}
+gaa() {
+  echo "Adding all changes to the staging area..."
+  git add --all || echo "Failed to add all changes to the staging area."
+}
+gb() {
+  echo "Showing detailed branch information..."
+  git branch -vv || echo "Failed to show detailed branch information."
+}
+gbD() {
+  echo "Deleting local branch..."
+  git branch -D "$1" || echo "Failed to delete local branch."
+}
+gbxD() {
+  echo "Deleting untracked branches..."
+  git branch | grep -v "$(git symbolic-ref --short refs/remotes/origin/HEAD | cut -d '/' -f 2)" | xargs git branch -D || echo "Failed to delete untracked branches."
+}
+gc-() {
+  echo "Checking out the previous branch..."
+  git checkout - || echo "Failed to checkout the previous branch."
+}
+gc() {
+  echo "Amending the last commit..."
+  git commit -v --amend -m "$1" || echo "Failed to amend the last commit."
+}
+gcb() {
+  echo "Creating and switching to a new branch..."
+  git checkout -b "$1" || echo "Failed to create and switch to a new branch."
+}
+gcl() {
+  echo "Cloning repository..."
+  git clone "$@" || echo "Failed to clone repository."
+}
+gcm() {
+  echo "Committing changes with a message..."
+  git commit -S -m "$1" || echo "Failed to commit changes."
+}
+gcn() {
+  echo "Amending the last commit without editing the message..."
+  git commit -v --no-edit --amend -S || echo "Failed to amend the last commit."
+}
+gco() {
+  echo "Switching branches..."
+  git checkout "$@" || echo "Failed to switch branches."
+}
+gcom() {
+  echo "Switching to the default remote branch..."
+  git checkout "$(git symbolic-ref --short refs/remotes/origin/HEAD | cut -d '/' -f 2)" || echo "Failed to switch to the default remote branch."
+}
+gcp() {
+  echo "Cherry-picking a commit..."
+  git cherry-pick "$@" || echo "Failed to cherry-pick the commit."
+}
+gcpc() {
+  echo "Continuing with cherry-pick operation..."
+  git cherry-pick --continue || echo "Cherry-pick failed to continue."
+}
+gfo() {
+  echo "Fetching updates from origin..."
+  git fetch origin || echo "Failed to fetch updates from origin."
+}
+ggl() {
+  echo "Pulling changes from origin..."
+  git pull origin || echo "Failed to pull changes from origin."
+}
+ggp() {
+  echo "Pushing changes with force-with-lease..."
+  git push origin "$(git rev-parse --abbrev-ref HEAD)" --force-with-lease || echo "Failed to push changes."
+}
+gl() {
+  echo "Pulling changes from the remote repository..."
+  git pull || echo "Failed to pull changes from the remote repository."
+}
+glog() {
+  echo "Showing commit history as a graph..."
+  git log --oneline --decorate --color --graph || echo "Failed to show commit history."
+}
+gpd() {
+  echo "Deleting remote branch..."
+  git push origin --delete "$1" || echo "Failed to delete remote branch."
+}
+gr() {
+  echo "Restoring uncommitted changes..."
+  git restore "$@" || echo "Failed to restore uncommitted changes."
+}
+grb() {
+  echo "Rebasing from a specific branch..."
+  git rebase "$@" || echo "Failed to rebase from the branch."
+}
+grbc() {
+  echo "Continuing rebase..."
+  git rebase --continue || echo "Failed to continue rebase."
+}
+grh() {
+  echo "Resetting branch to a previous commit (hard)..."
+  git reset --hard "$@" || echo "Failed to reset branch."
+}
+grs() {
+  echo "Resetting branch to a previous commit (soft)..."
+  git reset --soft "$@" || echo "Failed to reset branch."
+}
+grss() {
+  echo "Restoring changes from a specific source..."
+  git restore --source "$@" || echo "Failed to restore changes from the source."
+}
+grst() {
+  echo "Restoring staged changes..."
+  git restore --staged "$@" || echo "Failed to restore staged changes."
+}
+gst() {
+  echo "Displaying the current status of the repository..."
+  git status || echo "Failed to display repository status."
+}
+gupoc() {
+  echo "Pulling and rebasing from a specific branch..."
+  git pull --rebase origin "$@" || echo "Failed to pull and rebase."
+}
+gupom() {
+  echo "Pulling and rebasing from the default remote branch..."
+  git pull --rebase origin "$(git symbolic-ref --short refs/remotes/origin/HEAD | cut -d '/' -f 2)" || echo "Failed to pull and rebase from the default remote branch."
+}
+
+# Comandos relacionados con el front
+naf() {
+  echo "Running npm audit fix to fix security vulnerabilities..."
+  npm audit fix || echo "Failed to fix security vulnerabilities."
+}
+ni() {
+  echo "Installing npm dependencies..."
+  npm install || echo "Failed to install npm dependencies."
+}
+nrd() {
+  echo "Starting the application in development mode..."
+  npm run dev || echo "Failed to start the application in development mode."
+}
+xmodules() {
+  echo "Removing node_modules and package-lock.json for a clean installation..."
+  rm -rf node_modules apps/old-web/node_modules && rm package-lock.json || echo "Failed to remove node_modules and package-lock.json."
+}
+
+# Comandos de Rails
+be() {
+  echo "Executing bundle exec..."
+  bundle exec "$@" || echo "Failed to execute bundle exec."
+}
+bi() {
+  echo "Installing Ruby gems with Bundler..."
+  bundle install || echo "Failed to install gems with Bundler."
+}
+bu() {
+  echo "Updating Ruby gems with Bundler..."
+  bundle update || echo "Failed to update gems with Bundler."
+}
+oth() {
+  echo "Starting Sidekiq with others configuration..."
+  z nominapp_api && bundle exec sidekiq -C config/sidekiq_others.yml || echo "Failed to start Sidekiq with others configuration."
+}
+preprc() {
+  echo "Preparing Rails console..."
+  spring stop && DISABLE_PRY_RAILS=1 rails console || echo "Failed to prepare Rails console."
+}
+rc() {
+  echo "Starting Rails console..."
+  rails console || echo "Failed to start Rails console."
+}
+rdm() {
+  echo "Running database migrations..."
+  bundle exec rake db:migrate || echo "Failed to run database migrations."
+}
+rdms() {
+  echo "Running database migrations and seeding..."
+  bundle exec rake db:migrate db:seed || echo "Failed to run migrations and seed database."
+}
+rdmt() {
+  echo "Running test environment migrations..."
+  bundle exec rake db:migrate RAILS_ENV=test || echo "Failed to run test environment migrations."
+}
+rdr() {
+  echo "Rolling back the last migration..."
+  bundle exec rake db:rollback || echo "Failed to rollback the last migration."
+}
+rg() {
+  echo "Generating code (models, controllers, etc.)..."
+  rails generate "$@" || echo "Failed to generate code."
+}
+rrg() {
+  echo "Searching routes..."
+  rails routes | grep "$@" || echo "Failed to search routes."
+}
+rs() {
+  echo "Starting the Rails server..."
+  rails server || echo "Failed to start the Rails server."
+}
+rt() {
+  echo "Running Rails tests..."
+  bin/rails test "$@" || echo "Failed to run Rails tests."
+}
+sid() {
+  echo "Starting Sidekiq..."
+  z nominapp_api && bundle exec sidekiq -C config/sidekiq.yml || echo "Failed to start Sidekiq."
+}
+src() {
+  echo "Starting Rails console in sandbox mode..."
+  rails console --sandbox -- --noautocomplete || echo "Failed to start Rails console in sandbox mode."
+}
+
+# Comandos específicos de la aplicación
+api() {
+  echo "Booting the API..."
+  z nominapp_api && rails server || echo "Failed to boot the API."
+}
+heroku-p() {
+  echo "Opening Rails console in Heroku (production)..."
+  heroku run DISABLE_PRY_RAILS=1 rails console --app nominapp-api || echo "Failed to open Rails console in Heroku (production)."
+}
+heroku-s() {
+  echo "Opening Rails console in Heroku (staging)..."
+  heroku run DISABLE_PRY_RAILS=1 rails console --app nominapp-api-stage || echo "Failed to open Rails console in Heroku (staging)."
+}
+react() {
+  echo "Booting the front..."
+  z nominapp_react && npm run dev || echo "Failed to boot the front."
+}
+reboot() {
+  echo "Rebooting..."
+  sudo reboot || echo "Failed to reboot the system."
+}
+restore() {
+  echo "Restoring database..."
+  pg_restore --clean --verbose --no-acl -d "$@" || echo "Failed to restore database."
+}
+stfu() {
+  RED="\e[31m"
+  GREEN="\e[32m"
+  YELLOW="\e[33m"
+  BLUE="\e[34m"
+  MAGENTA="\e[35m"
+  CYAN="\e[36m"
+  RESET="\e[0m"
+
+  sudo shutdown now || echo "Failed to shut down the system."
+
+  message="Shutting the fuck up..."
+
+  for i in {1..3}; do
+    for color in $RED $GREEN $YELLOW $BLUE $MAGENTA $CYAN; do
+      echo -ne "${color}${message}${RESET}\r"
+      sleep 0.1
+    done
+  done
+
+  echo -e "${RED}SHUTTING DOWN NOW...${RESET}"
+}
+xpuma() {
+  echo "Forcibly closing Puma server..."
+  pkill -9 -f puma || echo "Failed to forcibly close Puma server."
+}
 
 # Compression
-compress() { tar -czf "${1%/}.tar.gz" "${1%/}"; }
-alias decompress="tar -xzf"
+compress() {
+  if [ -z "$1" ]; then
+    echo "No directory specified for compression."
+    return 1
+  fi
+  echo "Compressing directory $1 into ${1%/}.tar.gz..."
+  tar -czf "${1%/}.tar.gz" "${1%/}" || echo "Failed to compress directory $1."
+}
 
-# Convert webm files generated by the Gnome screenshot video recorder to mp4s that are more compatible
+decompress() {
+  if [ -z "$1" ]; then
+    echo "No file specified for decompression."
+    return 1
+  fi
+  echo "Decompressing file $1..."
+  tar -xzf "$1" || echo "Failed to decompress file $1."
+}
+
+# Convert webm files to mp4
 webm2mp4() {
+  if [ -z "$1" ]; then
+    echo "No input file specified."
+    return 1
+  fi
   input_file="$1"
   output_file="${input_file%.webm}.mp4"
-  ffmpeg -i "$input_file" -c:v libx264 -preset slow -crf 22 -c:a aac -b:a 192k "$output_file"
+  echo "Converting $input_file to $output_file..."
+  ffmpeg -i "$input_file" -c:v libx264 -preset slow -crf 22 -c:a aac -b:a 192k "$output_file" || echo "Failed to convert $input_file to mp4."
 }
