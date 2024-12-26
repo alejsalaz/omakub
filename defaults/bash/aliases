@@ -111,8 +111,20 @@ zreact() {
   echo "Moving to the React directory..."
   z nominapp_react || echo "Failed to move to the React directory."
 }
+srest() {
+  echo "Copying short rest configuration..."
+  cp ~/Documents/short_rest.json ~/.config/safeeyes/safeeyes.json
+}
+lrest() {
+  echo "Copying long rest configuration..."
+  cp ~/Documents/long_rest.json ~/.config/safeeyes/safeeyes.json
+}
 
 # Comandos del sistema
+bashrc() {
+  echo "Opening ZSH configuration in Visual Studio Code..."
+  code ~/.bashrc || echo "Failed to open bash configuration."
+}
 cls() {
   echo "Clearing the screen..."
   clear || echo "Failed to clear the screen."
@@ -149,9 +161,27 @@ repeat() {
   echo "Repeating command..."
   for run in {1..10}; do "$@"; done || echo "Failed to repeat command."
 }
-bashrc() {
-  echo "Opening ZSH configuration in Visual Studio Code..."
-  code ~/.bashrc || echo "Failed to open ZSH configuration."
+stfu() {
+  RED="\e[31m"
+  GREEN="\e[32m"
+  YELLOW="\e[33m"
+  BLUE="\e[34m"
+  MAGENTA="\e[35m"
+  CYAN="\e[36m"
+  RESET="\e[0m"
+
+  sudo shutdown now || echo "Failed to shut down the system."
+
+  message="Shutting the fuck up..."
+
+  for i in {1..3}; do
+    for color in $RED $GREEN $YELLOW $BLUE $MAGENTA $CYAN; do
+      echo -ne "${color}${message}${RESET}\r"
+      sleep 0.1
+    done
+  done
+
+  echo -e "${RED}SHUTTING DOWN NOW...${RESET}"
 }
 
 # Comandos de red y conectividad
@@ -348,7 +378,7 @@ preprc() {
 }
 rc() {
   echo "Starting Rails console..."
-  rails console || echo "Failed to start Rails console."
+  DISABLE_PRY_RAILS=1 rails console || echo "Failed to start Rails console."
 }
 rdm() {
   echo "Running database migrations..."
@@ -396,6 +426,10 @@ api() {
   echo "Booting the API..."
   z nominapp_api && rails server || echo "Failed to boot the API."
 }
+heroku-c() {
+  echo "Opening Rails console in review app..."
+  heroku run DISABLE_PRY_RAILS=1 rails console --app "$@" || echo "Failed to prepare Rails console."
+}
 heroku-p() {
   echo "Opening Rails console in Heroku (production)..."
   heroku run DISABLE_PRY_RAILS=1 rails console --app nominapp-api || echo "Failed to open Rails console in Heroku (production)."
@@ -415,28 +449,6 @@ reboot() {
 restore() {
   echo "Restoring database..."
   pg_restore --clean --verbose --no-acl -d "$@" || echo "Failed to restore database."
-}
-stfu() {
-  RED="\e[31m"
-  GREEN="\e[32m"
-  YELLOW="\e[33m"
-  BLUE="\e[34m"
-  MAGENTA="\e[35m"
-  CYAN="\e[36m"
-  RESET="\e[0m"
-
-  sudo shutdown now || echo "Failed to shut down the system."
-
-  message="Shutting the fuck up..."
-
-  for i in {1..3}; do
-    for color in $RED $GREEN $YELLOW $BLUE $MAGENTA $CYAN; do
-      echo -ne "${color}${message}${RESET}\r"
-      sleep 0.1
-    done
-  done
-
-  echo -e "${RED}SHUTTING DOWN NOW...${RESET}"
 }
 xpuma() {
   echo "Forcibly closing Puma server..."
