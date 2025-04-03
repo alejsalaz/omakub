@@ -129,17 +129,48 @@ cls() {
   echo "Clearing the screen..."
   clear || echo "Failed to clear the screen."
 }
+cursor() {
+  /opt/cursor/Cursor-*.AppImage
+}
 fbc() {
   echo "Opening file in Visual Studio Code..."
   fzf --bind 'enter:become(code {})' || echo "Failed to open file in Visual Studio Code."
+}
+fly() {
+  ~/.fly/bin/flyctl "$@" || echo "Failed to run flyctl command."
 }
 fq() {
   echo "Finding a file..."
   fzf -q "$@" || echo "Failed to find a file."
 }
+ghost() {
+  echo "Ghosting a window..."
+  WIN_ID=$(xdotool selectwindow)
+
+  /usr/bin/python3 -c "
+import gi
+gi.require_version('Gdk', '3.0')
+from gi.repository import Gdk, GdkX11
+window = GdkX11.X11Window.foreign_new_for_display(
+    Gdk.Display.get_default(),
+    $WIN_ID
+)
+if window:
+    window.set_pass_through(True)
+"
+
+  xprop -id $WIN_ID -f _NET_WM_WINDOW_TYPE 32a -set _NET_WM_WINDOW_TYPE _NET_WM_WINDOW_TYPE_DOCK
+
+  xdotool windowraise $WIN_ID
+  echo "Combo-method applied to window $WIN_ID"
+}
 h() {
   echo "Displaying command history..."
   history || echo "Failed to display command history."
+}
+hide() {
+  echo "Hiding window controls..."
+  xprop -f _MOTIF_WM_HINTS 32c -set _MOTIF_WM_HINTS "0x2, 0x0, 0x2, 0x0, 0x0" || echo "Failed to hide window."
 }
 ioredis() {
   echo "Restarting Redis server..."
@@ -148,6 +179,20 @@ ioredis() {
 layout() {
   echo "Opening Konsole with development layout..."
   konsole --layout ~/Documents/Konsole || echo "Failed to open Konsole with layout."
+}
+open() {
+  echo "Opening page..."
+  while true; do
+    status_code=$(curl -s -I -o /dev/null -w "HTTP/2 %{http_code}" "$1")
+    if [[ $status_code = "HTTP/2 200" ]]; then
+      echo -e "\e[32m✔  $status_code - Loading...\e[0m"
+      xdg-open "$1" &
+      break
+    else
+      echo -e "\e[31m✖  $status_code - Waiting...\e[0m"
+      sleep 5
+    fi
+  done
 }
 reload() {
   echo "Reloading bash configuration..."
@@ -160,6 +205,10 @@ remove() {
 repeat() {
   echo "Repeating command..."
   for run in {1..10}; do "$@"; done || echo "Failed to repeat command."
+}
+show() {
+  echo "Showing window controls..."
+  xprop -f _MOTIF_WM_HINTS 32c -set _MOTIF_WM_HINTS "0x0, 0x0, 0x0, 0x0, 0x0" || echo "Failed to show window."
 }
 stfu() {
   RED="\e[31m"
@@ -411,6 +460,18 @@ rs() {
 rt() {
   echo "Running Rails tests..."
   bin/rails test "$@" || echo "Failed to run Rails tests."
+}
+rtm() {
+  modified_files=$(git diff --name-only master...HEAD)
+  test_files=$(echo "$modified_files" | grep -E '^test/.*_test\.rb$')
+
+  if [ -z "$test_files" ]; then
+    echo "No test files found."
+  fi
+
+  echo "Running modified tests..."
+  rails test $test_files -f
+  echo "Finished running modified tests."
 }
 sid() {
   echo "Starting Sidekiq..."
